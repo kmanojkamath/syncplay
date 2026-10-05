@@ -15,11 +15,12 @@ class MusicCardsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: List.generate(
-        audioList.length,
-        (i) =>
-            _MusicCard(index: i, show: filter.show(i), audioFile: filter.audioFiles[i],),
+    return ListView.builder(
+      itemCount: audioList.length,
+      itemBuilder: (context, index) => _MusicCard(
+        index: index,
+        show: filter.show(index),
+        audioFile: filter.audioFiles[index],
       ),
     );
   }
@@ -44,18 +45,20 @@ class _MusicCardState extends State<_MusicCard> {
   @override
   void initState() {
     super.initState();
-      player = AudioPlayer();
-      player.setReleaseMode(ReleaseMode.stop);
-      final audioPath = audioList[widget.index];
-      metadata = readMetadata(widget.audioFile, getImage: true);
+    player = AudioPlayer();
+    player.setReleaseMode(ReleaseMode.stop);
+    metadata = readMetadata(widget.audioFile, getImage: true);
 
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        maxWidth = MediaQuery.sizeOf(context).width;
+    _initializePlayer();
+  }
 
-        await player.setSource(AssetSource(audioPath));
-        totalDuration = await player.getDuration();
-        setState(() {});
-      });
+  Future<void> _initializePlayer() async {
+    final audioPath = audioList[widget.index];
+    await player.setSource(AssetSource(audioPath));
+    final duration = await player.getDuration();
+    setState(() {
+      totalDuration = duration;
+    });
   }
 
   @override
@@ -66,6 +69,7 @@ class _MusicCardState extends State<_MusicCard> {
 
   @override
   Widget build(BuildContext context) {
+    maxWidth = MediaQuery.sizeOf(context).width;
     return widget.show
         ? Card(
             child: Row(
