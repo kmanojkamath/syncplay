@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:syncplay/data/audios.dart';
 import 'package:syncplay/logic/asset_to_file.dart';
 import 'package:syncplay/logic/filter.dart';
+import 'package:syncplay/pages/listening_room.dart';
 import 'package:syncplay/widgets/music_card/home_page_widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Filter filter = Filter(List.empty());
+  int currentPageIndex = 0;
 
   @override
   void initState() {
@@ -35,7 +37,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: homePageAppBar(),
-      body: homePageBody(setState, filter),
+      body: [homePageBody(setState, filter), ListeningRoom()][currentPageIndex],
+      bottomNavigationBar: NavigationBar(
+        destinations: [
+          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+          NavigationDestination(
+            icon: Icon(Icons.music_note),
+            label: "Listening Room",
+          ),
+        ],
+        onDestinationSelected: (value) => setState(() {
+          currentPageIndex = value;
+        }),
+        selectedIndex: currentPageIndex,
+      ),
     );
   }
 }
