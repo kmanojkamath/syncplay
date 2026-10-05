@@ -108,7 +108,6 @@ class _MusicCardState extends State<_MusicCard> {
                                   index: widget.index,
                                   duration: duration,
                                   isPlay: false,
-                                  lastUpdate: DateTime.now(),
                                 );
                                 await roomRef!.update(room.toFire());
                               }

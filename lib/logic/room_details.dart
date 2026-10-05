@@ -85,17 +85,15 @@ class Room {
   int? audioIndex;
   Duration? currentDuration;
   bool? isPlaying;
-  DateTime lastUpdated;
   StreamSubscription? _subscription;
 
   Room({
     required this.name,
     required this.id,
-    DateTime? lastUpdated,
     this.audioIndex,
     this.currentDuration,
     this.isPlaying,
-  }) : lastUpdated = lastUpdated ?? DateTime.now();
+  });
 
   void startListening({required Future<void> Function() syncRoom}) {
     if (_subscription != null) return;
@@ -108,17 +106,26 @@ class Room {
           final data = snapshot.data();
           if (data == null) return;
 
+          final storedDuration = data["currentDuration"] != null
+              ? Duration(milliseconds: (data["currentDuration"] as num).toInt())
+              : Duration.zero;
+
+          final lastUpdated = (data["lastUpdated"] as Timestamp?)?.toDate();
+
+          Duration currentDuration = storedDuration;
+
+          if (data["isPlaying"] == true && lastUpdated != null) {
+            final elapsed = DateTime.now().difference(lastUpdated);
+            currentDuration += elapsed;
+          }
+
           update(
             index: data["audioIndex"],
-            duration: data["currentDuration"] != null
-                ? Duration(
-                    milliseconds: (data["currentDuration"] as num).toInt(),
-                  )
-                : null,
+            duration: currentDuration,
             isPlay: data["isPlaying"],
-            lastUpdate: (data["lastUpdated"] as Timestamp?)?.toDate(),
           );
           await syncRoom.call();
+          print("yo");
         });
   }
 
@@ -146,19 +153,12 @@ class Room {
           ? Duration(milliseconds: data["currentDuration"])
           : null,
       isPlaying: data["isPlaying"],
-      lastUpdated: (data["lastUpdated"] as Timestamp?)?.toDate(),
     );
   }
 
-  void update({
-    int? index,
-    Duration? duration,
-    bool? isPlay,
-    DateTime? lastUpdate,
-  }) {
+  void update({int? index, Duration? duration, bool? isPlay}) {
     if (index != null) audioIndex = index;
     if (duration != null) currentDuration = duration;
     if (isPlay != null) isPlaying = isPlay;
-    if (lastUpdate != null) lastUpdated = lastUpdate;
   }
 }

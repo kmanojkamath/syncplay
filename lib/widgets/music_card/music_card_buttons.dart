@@ -34,7 +34,6 @@ class _PausePlayButtonState extends State<PausePlayButton> {
                 index: widget.index,
                 duration: duration,
                 isPlay: true,
-                lastUpdate: DateTime.now(),
               );
               await roomRef!.update(room.toFire());
             }
@@ -47,7 +46,6 @@ class _PausePlayButtonState extends State<PausePlayButton> {
                 index: widget.index,
                 duration: duration,
                 isPlay: false,
-                lastUpdate: DateTime.now(),
               );
               await roomRef!.update(room.toFire());
             }
@@ -61,7 +59,6 @@ class _PausePlayButtonState extends State<PausePlayButton> {
                 index: widget.index,
                 duration: duration,
                 isPlay: true,
-                lastUpdate: DateTime.now(),
               );
               await roomRef!.update(room.toFire());
             }
