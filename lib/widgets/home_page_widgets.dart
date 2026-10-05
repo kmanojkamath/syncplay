@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:syncplay/logic/filter.dart';
-import 'package:syncplay/pages/home_page.dart';
+import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/widgets/music_card/music_card.dart';
 
 PreferredSizeWidget homePageAppBar() {
   return AppBar(title: Text("SyncPlay"));
 }
 
-Widget homePageBody(Function setState, Filter filter) {
+Widget homePageBody(Function setState, RoomDetails roomDetails) {
   return Column(
     children: [
-      _filters(setState, filter),
-      if (filter.audioFiles.isNotEmpty)
-        Expanded(child: MusicCardsList(filter: filter)),
+      _filters(setState, roomDetails),
+      if (roomDetails.audioFiles.isNotEmpty)
+        Expanded(child: MusicCardsList(roomDetails: roomDetails))
+      else
+        CircularProgressIndicator(),
     ],
   );
 }
 
-Widget _filters(Function setState, Filter filter) {
+Widget _filters(Function setState, RoomDetails roomDetails) {
   return Row(
     children: [
       Padding(padding: const EdgeInsets.all(8.0), child: Icon(Icons.search)),
       Expanded(
         child: TextField(
-          controller: filter.controller,
+          controller: roomDetails.controller,
           onChanged: (_) {
             setState(() {});
           },
@@ -34,7 +35,7 @@ Widget _filters(Function setState, Filter filter) {
         child: ElevatedButton(
           onPressed: () {
             setState(() {
-              filter.favouritesOnly = !filter.favouritesOnly;
+              roomDetails.favouritesOnly = !roomDetails.favouritesOnly;
             });
           },
           child: Text("Favourites"),

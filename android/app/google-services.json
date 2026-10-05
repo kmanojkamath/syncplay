@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "241178671335",
+    "project_id": "sync-play-12c04",
+    "storage_bucket": "sync-play-12c04.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241178671335:android:d4029b216bb033a17cca42",
+        "android_client_info": {
+          "package_name": "com.example.syncplay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJsEqc0wxo3wvuFMjkIxTNsSenT51o4f0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

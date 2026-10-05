@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:syncplay/data/audios.dart';
 import 'package:syncplay/logic/asset_to_file.dart';
-import 'package:syncplay/logic/filter.dart';
+import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
 import 'package:syncplay/widgets/home_page_widgets.dart';
 
@@ -15,8 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Filter filter = Filter(List.empty());
-  final roomDetials = RoomDetails();
+  RoomDetails roomDetails = RoomDetails(List.empty());
 
   @override
   void initState() {
@@ -26,10 +25,9 @@ class _HomePageState extends State<HomePage> {
       for (int i = 0; i < audioList.length; i++) {
         audioFiles[i] = await assetToFile(audioList[i]);
       }
-      filter = Filter(audioFiles);
-      setState(() {
-        filter = Filter(audioFiles);
-      });
+      roomDetails = RoomDetails(audioFiles);
+      await roomDetails.initializePlayers();
+      setState(() {});
     });
   }
 
@@ -38,21 +36,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: homePageAppBar(),
       body: [
-        homePageBody(setState, filter),
-        ListeningRoom(roomDetails: roomDetials),
-      ][roomDetials.currentPageIndex],
-      bottomNavigationBar: homePageNavigationBar(setState, roomDetials),
+        homePageBody(setState, roomDetails),
+        ListeningRoom(roomDetails: roomDetails),
+      ][roomDetails.currentPageIndex],
+      bottomNavigationBar: homePageNavigationBar(setState, roomDetails),
     );
   }
-}
-
-class RoomDetails {
-  String? roomName;
-  String? roomID;
-  TextEditingController roomNamecontroller = TextEditingController();
-  TextEditingController roomIDcontroller = TextEditingController();
-  int currentPageIndex = 0;
-  ListeningRoomPage listeningRoomPage = ListeningRoomPage.home;
-
-  RoomDetails({this.roomID, this.roomName});
 }

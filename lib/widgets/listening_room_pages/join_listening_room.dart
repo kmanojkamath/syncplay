@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:syncplay/pages/home_page.dart';
+import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
 
 Widget joinRoomScreen(RoomDetails roomDetails, Function setState) {

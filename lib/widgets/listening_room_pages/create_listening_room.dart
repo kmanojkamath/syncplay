@@ -1,16 +1,14 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:syncplay/pages/home_page.dart';
+import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
 
-Widget createRoomScreen(
-  RoomDetails roomDetials,
-  Function setState,
-) {
+Widget createRoomScreen(RoomDetails roomDetails, Function setState) {
   return TextField(
-    controller: roomDetials.roomNamecontroller,
-    onSubmitted: (value) {
+    controller: roomDetails.roomNamecontroller,
+    onSubmitted: (value) async {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       final random = Random();
       final id = List.generate(
@@ -18,10 +16,16 @@ Widget createRoomScreen(
         (_) => chars[random.nextInt(chars.length)],
       ).join();
 
+      FirebaseFirestore.instance.collection("rooms").doc(id).set({
+        "name": roomDetails.roomNamecontroller.text,
+        "lastUpdated": FieldValue.serverTimestamp(),
+        "isPlaying": false
+      });
+      
       setState(() {
-        roomDetials.roomID = id;
-        roomDetials.roomName = roomDetials.roomNamecontroller.text;
-        roomDetials.listeningRoomPage = ListeningRoomPage.room;
+        roomDetails.roomID = id;
+        roomDetails.roomName = roomDetails.roomNamecontroller.text;
+        roomDetails.listeningRoomPage = ListeningRoomPage.room;
       });
     },
   );

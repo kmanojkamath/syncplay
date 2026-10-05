@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:syncplay/pages/home_page.dart';
+import 'package:syncplay/logic/room_details.dart';
+
 import 'package:syncplay/widgets/listening_room_pages/create_listening_room.dart';
 import 'package:syncplay/widgets/listening_room_pages/join_listening_room.dart';
 import 'package:syncplay/widgets/listening_room_pages/listening_room.dart';

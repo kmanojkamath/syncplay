@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:syncplay/pages/home_page.dart';
+import 'package:syncplay/logic/room_details.dart';
 
 Widget listeningRoom(RoomDetails roomDetials) {
   return Column(
