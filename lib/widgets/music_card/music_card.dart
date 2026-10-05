@@ -17,21 +17,21 @@ class MusicCardsList extends StatelessWidget {
     return ListView.builder(
       itemCount: audioList.length,
       itemBuilder: (context, index) =>
-          _MusicCard(index: index, roomDetails: roomDetails),
+          MusicCard(index: index, roomDetails: roomDetails),
     );
   }
 }
 
-class _MusicCard extends StatefulWidget {
+class MusicCard extends StatefulWidget {
   final int index;
   final RoomDetails roomDetails;
-  const new({required this.index, required this.roomDetails});
+  const new({super.key, required this.index, required this.roomDetails});
 
   @override
-  State<_MusicCard> createState() => _MusicCardState();
+  State<MusicCard> createState() => MusicCardState();
 }
 
-class _MusicCardState extends State<_MusicCard> {
+class MusicCardState extends State<MusicCard> {
   @override
   void initState() {
     super.initState();

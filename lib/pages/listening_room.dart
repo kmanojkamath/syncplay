@@ -25,6 +25,7 @@ class _ListeningRoomState extends State<ListeningRoom> {
         if (!didPop) {
           setState(() {
             widget.roomDetails.listeningRoomPage = ListeningRoomPage.home;
+            widget.roomDetails.room = null;
           });
         }
       },

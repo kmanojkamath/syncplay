@@ -6,7 +6,16 @@ import 'package:syncplay/pages/listening_room.dart';
 Widget joinRoomScreen(RoomDetails roomDetails, Function setState) {
   return Column(
     children: [
-      TextField(controller: roomDetails.roomIDcontroller),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          controller: roomDetails.roomIDcontroller,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "Room ID",
+          ),
+        ),
+      ),
       ElevatedButton(
         onPressed: () async {
           final id = roomDetails.roomIDcontroller.text;

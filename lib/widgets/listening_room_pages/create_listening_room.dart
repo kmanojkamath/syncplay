@@ -6,33 +6,40 @@ import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
 
 Widget createRoomScreen(RoomDetails roomDetails, Function setState) {
-  return TextField(
-    controller: roomDetails.roomNamecontroller,
-    onSubmitted: (value) async {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      final random = Random();
-      final id = List.generate(
-        6,
-        (_) => chars[random.nextInt(chars.length)],
-      ).join();
-
-      await FirebaseFirestore.instance
-          .collection("rooms")
-          .doc(id)
-          .set(
-            Room(name: roomDetails.roomNamecontroller.text, id: id).toFire(),
-          );
-      
-      roomDetails.room = Room(
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: TextField(
+      controller: roomDetails.roomNamecontroller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: "Room Name",
+      ),
+      onSubmitted: (value) async {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        final random = Random();
+        final id = List.generate(
+          6,
+          (_) => chars[random.nextInt(chars.length)],
+        ).join();
+    
+        await FirebaseFirestore.instance
+            .collection("rooms")
+            .doc(id)
+            .set(
+              Room(name: roomDetails.roomNamecontroller.text, id: id).toFire(),
+            );
+    
+        roomDetails.room = Room(
           name: roomDetails.roomNamecontroller.text,
           id: id,
         );
-
-      roomDetails.room!.startListening(syncRoom: roomDetails.syncRoom);
-
-      setState(() {
-        roomDetails.listeningRoomPage = ListeningRoomPage.room;
-      });
-    },
+    
+        roomDetails.room!.startListening(syncRoom: roomDetails.syncRoom);
+    
+        setState(() {
+          roomDetails.listeningRoomPage = ListeningRoomPage.room;
+        });
+      },
+    ),
   );
 }
