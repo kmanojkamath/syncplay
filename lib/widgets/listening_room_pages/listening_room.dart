@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/widgets/music_card/music_card.dart';
 
+///Widget which is displayed when the user is in a listening room.
 Widget listeningRoom(RoomDetails roomDetails) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,

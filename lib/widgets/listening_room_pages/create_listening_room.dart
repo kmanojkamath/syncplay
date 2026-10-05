@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
 
+///Widget which is displayed when the user clicks on the "Create Room" button in the listening room home page.
 Widget createRoomScreen(RoomDetails roomDetails, Function setState) {
   return Padding(
     padding: const EdgeInsets.all(8.0),

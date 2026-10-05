@@ -1,3 +1,4 @@
+///List of path of audio files in the assets folder.
 final List<String> audioList = [
   'audios/Hum Pyaar Karne Wale.mp3',
   'audios/Kadabidiki.mp3',

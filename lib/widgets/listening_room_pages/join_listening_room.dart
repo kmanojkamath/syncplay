@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
 
+///Widget which is displayed when the user clicks on the "Join Room" button in the listening room home page.
 Widget joinRoomScreen(RoomDetails roomDetails, Function setState) {
   return Column(
     children: [

@@ -8,6 +8,7 @@ import 'package:syncplay/logic/room_details.dart';
 
 import 'music_card_buttons.dart';
 
+///Widget which displays the list of music cards. It is used in the home page of the app.
 class MusicCardsList extends StatelessWidget {
   final RoomDetails roomDetails;
   const new({super.key, required this.roomDetails});
@@ -22,6 +23,9 @@ class MusicCardsList extends StatelessWidget {
   }
 }
 
+///Widget which displays a music card. It is used is the MusicCardsList widget.
+///It displays the title, artist, and album art of the audio file
+///It also displays the pause/play button, the progress bar, and the star button.
 class MusicCard extends StatefulWidget {
   final int index;
   final RoomDetails roomDetails;

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
 
+///Widget which is displayed when the user clicks on the "Listening Room" button in the home page.
+///It is the home page of the listening room.
+///Here, the user can click on the "Create Room" button to create a new room, or the "Join Room" button to join an existing room.
 Widget listeningRoomHome(Function setState, RoomDetails roomDetails) {
   return Center(
           child: Column(

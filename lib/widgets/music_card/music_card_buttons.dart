@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:syncplay/data/audios.dart';
 import 'package:syncplay/logic/room_details.dart';
 
+///Pause/Play button which is displayed in the music card. It is used to pause or play the audio.
 class PausePlayButton extends StatefulWidget {
   final RoomDetails roomDetails;
   final int index;
@@ -83,6 +84,7 @@ class _PausePlayButtonState extends State<PausePlayButton> {
   }
 }
 
+///Star button which is displayed in the music card. It is used to mark the audio as favourite.
 class StarButton extends StatefulWidget {
   final int index;
   const new({super.key, required this.index});

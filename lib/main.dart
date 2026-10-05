@@ -7,6 +7,7 @@ import 'pages/home_page.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+///Sets up the Firebase emulator for Firestore if the app is running in debug mode.
 void setupFirebaseEmulator() {
   if(kDebugMode) FirebaseFirestore.instance.useFirestoreEmulator('10.0.2.2', 8080);
 }

@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/widgets/music_card/music_card.dart';
 
+///App bar for HomePage
+///It displays the title of the app.
 PreferredSizeWidget homePageAppBar() {
   return AppBar(title: Text("SyncPlay"));
 }
 
+///Body for Home Page
+///It displays the search bar and filter for favourites in the top.
+///It diaplays MusicCardsList widget which displays the list of music cards bellow the search bar and filter for favourites.
 Widget homePageBody(Function setState, RoomDetails roomDetails) {
   return Column(
     children: [
@@ -45,6 +50,8 @@ Widget _filters(Function setState, RoomDetails roomDetails) {
   );
 }
 
+///Bottom Navigation Bar for Home Page
+///It is used to navigate between the Home Page and the Listening Room Page.
 Widget homePageNavigationBar(Function setState, RoomDetails roomDetials) {
   return NavigationBar(
     destinations: [

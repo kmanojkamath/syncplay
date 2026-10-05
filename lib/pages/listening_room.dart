@@ -8,6 +8,9 @@ import 'package:syncplay/widgets/listening_room_pages/listening_room_home.dart';
 
 enum ListeningRoomPage { home, createRoom, joinRoom, room }
 
+///Page which is displayed when the user clicks on the "Listening Room" button in the home page.
+///It contains the home page of the listening room, the create room page, the join room page, and the room page.
+///The home page is displayed by default, and the create room page, join room page, and room page are displayed when the user clicks on the corresponding buttons.
 class ListeningRoom extends StatefulWidget {
   final RoomDetails roomDetails;
   const new({super.key, required this.roomDetails});
@@ -38,7 +41,10 @@ class _ListeningRoomState extends State<ListeningRoom> {
           widget.roomDetails,
           setState,
         ),
-        ListeningRoomPage.joinRoom => joinRoomScreen(widget.roomDetails, setState),
+        ListeningRoomPage.joinRoom => joinRoomScreen(
+          widget.roomDetails,
+          setState,
+        ),
         ListeningRoomPage.room => listeningRoom(widget.roomDetails),
       },
     );

@@ -7,6 +7,9 @@ import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
 import 'package:syncplay/widgets/home_page_widgets.dart';
 
+///Page which is always displayed when the app is opened.
+///It contains the home page and the listening room page.
+///The home page is displayed by default, and the listening room page is displayed when the user joins or creates a room.
 class HomePage extends StatefulWidget {
   const new({super.key});
 
