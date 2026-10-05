@@ -22,12 +22,15 @@ Widget createRoomScreen(RoomDetails roomDetails, Function setState) {
           .set(
             Room(name: roomDetails.roomNamecontroller.text, id: id).toFire(),
           );
-
-      setState(() {
-        roomDetails.room = Room(
+      
+      roomDetails.room = Room(
           name: roomDetails.roomNamecontroller.text,
           id: id,
         );
+
+      roomDetails.room!.startListening(syncRoom: roomDetails.syncRoom);
+
+      setState(() {
         roomDetails.listeningRoomPage = ListeningRoomPage.room;
       });
     },

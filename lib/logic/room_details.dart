@@ -39,9 +39,8 @@ class RoomDetails {
 
     final fauvouriteCondition = favouritesOnly ? isFavourite[index] : true;
 
-    final metadata = readMetadata(audioFiles[index], getImage: false);
-    String songName = (metadata.title ?? "").toLowerCase();
-    String artist = (metadata.artist ?? "").toLowerCase();
+    String songName = (metadatas[index].title ?? "").toLowerCase();
+    String artist = (metadatas[index].artist ?? "").toLowerCase();
     final searchCondition =
         songName.contains(searchController.text.toLowerCase()) ||
         artist.contains(searchController.text.toLowerCase());
@@ -62,6 +61,22 @@ class RoomDetails {
       (i) => readMetadata(audioFiles[i], getImage: true),
     );
   }
+
+  Future<void> syncRoom() async {
+    for (int i = 0; i < audioPlayers.length; i++) {
+      if (i == room!.audioIndex) {
+        await audioPlayers[i].seek(room!.currentDuration ?? Duration.zero);
+
+        if (room!.isPlaying == true) {
+          await audioPlayers[i].resume();
+        } else {
+          await audioPlayers[i].pause();
+        }
+      } else {
+        await audioPlayers[i].pause();
+      }
+    }
+  }
 }
 
 class Room {
@@ -71,8 +86,7 @@ class Room {
   Duration? currentDuration;
   bool? isPlaying;
   DateTime lastUpdated;
-
-  late final StreamSubscription _subscription;
+  StreamSubscription? _subscription;
 
   Room({
     required this.name,
@@ -81,27 +95,36 @@ class Room {
     this.audioIndex,
     this.currentDuration,
     this.isPlaying,
-  }) : lastUpdated = lastUpdated ?? DateTime.now() {
+  }) : lastUpdated = lastUpdated ?? DateTime.now();
+
+  void startListening({required Future<void> Function() syncRoom}) {
+    if (_subscription != null) return;
+
     _subscription = FirebaseFirestore.instance
         .collection("rooms")
         .doc(id)
         .snapshots()
-        .listen((snapshot) {
+        .listen((snapshot) async {
           final data = snapshot.data();
           if (data == null) return;
+
           update(
             index: data["audioIndex"],
             duration: data["currentDuration"] != null
-                ? Duration(milliseconds: data["currentDuration"])
+                ? Duration(
+                    milliseconds: (data["currentDuration"] as num).toInt(),
+                  )
                 : null,
             isPlay: data["isPlaying"],
             lastUpdate: (data["lastUpdated"] as Timestamp?)?.toDate(),
           );
+          await syncRoom.call();
         });
   }
 
-  Future<void> dispose() async {
-    await _subscription.cancel();
+  Future<void> stopListening() async {
+    await _subscription?.cancel();
+    _subscription = null;
   }
 
   Map<String, dynamic> toFire() {

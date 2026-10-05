@@ -41,7 +41,7 @@ class _PausePlayButtonState extends State<PausePlayButton> {
             break;
           case PlayerState.playing:
             await player.pause();
-            if (player.state == PlayerState.playing && roomRef != null) {
+            if (player.state == PlayerState.paused && roomRef != null) {
               final duration = await player.getCurrentPosition();
               room.update(
                 index: widget.index,

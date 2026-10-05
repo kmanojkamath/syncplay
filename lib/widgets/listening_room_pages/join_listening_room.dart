@@ -18,8 +18,10 @@ Widget joinRoomScreen(RoomDetails roomDetails, Function setState) {
           if (data == null) {
             //No Such Room
           } else {
+            roomDetails.room = Room.fromFire(id, data);
+
+            roomDetails.room!.startListening(syncRoom: roomDetails.syncRoom);
             setState(() {
-              roomDetails.room = Room.fromFire(id, data);
               roomDetails.listeningRoomPage = ListeningRoomPage.room;
             });
           }
