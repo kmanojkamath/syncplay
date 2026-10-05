@@ -1,15 +1,41 @@
-import 'package:flutter/material.dart';
-import 'package:syncplay/widgets/music_card.dart';
+import 'dart:io';
 
-class HomePage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:syncplay/data/audios.dart';
+import 'package:syncplay/logic/asset_to_file.dart';
+import 'package:syncplay/logic/filter.dart';
+import 'package:syncplay/widgets/music_card/home_page_widgets.dart';
+
+class HomePage extends StatefulWidget {
   const new({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: _homePageAppBar(), body: MusicCardsList());
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-PreferredSizeWidget _homePageAppBar() {
-  return AppBar(title: Text("SyncPlay"));
+class _HomePageState extends State<HomePage> {
+  Filter filter = Filter(List.empty());
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      List<File> audioFiles = List.filled(audioList.length, File(""));
+      for (int i = 0; i < audioList.length; i++) {
+        audioFiles[i] = await assetToFile(audioList[i]);
+      }
+      filter = Filter(audioFiles);
+      setState(() {
+        filter = Filter(audioFiles);
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: homePageAppBar(),
+      body: homePageBody(setState, filter),
+    );
+  }
 }
