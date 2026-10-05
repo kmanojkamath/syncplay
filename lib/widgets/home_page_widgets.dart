@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncplay/logic/filter.dart';
+import 'package:syncplay/pages/home_page.dart';
 import 'package:syncplay/widgets/music_card/music_card.dart';
 
 PreferredSizeWidget homePageAppBar() {
@@ -40,5 +41,21 @@ Widget _filters(Function setState, Filter filter) {
         ),
       ),
     ],
+  );
+}
+
+Widget homePageNavigationBar(Function setState, RoomDetails roomDetials) {
+  return NavigationBar(
+    destinations: [
+      NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+      NavigationDestination(
+        icon: Icon(Icons.music_note),
+        label: "Listening Room",
+      ),
+    ],
+    onDestinationSelected: (value) => setState(() {
+      roomDetials.currentPageIndex = value;
+    }),
+    selectedIndex: roomDetials.currentPageIndex,
   );
 }

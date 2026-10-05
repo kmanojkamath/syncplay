@@ -5,7 +5,7 @@ import 'package:syncplay/data/audios.dart';
 import 'package:syncplay/logic/asset_to_file.dart';
 import 'package:syncplay/logic/filter.dart';
 import 'package:syncplay/pages/listening_room.dart';
-import 'package:syncplay/widgets/music_card/home_page_widgets.dart';
+import 'package:syncplay/widgets/home_page_widgets.dart';
 
 class HomePage extends StatefulWidget {
   const new({super.key});
@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Filter filter = Filter(List.empty());
-  int currentPageIndex = 0;
+  final roomDetials = RoomDetails();
 
   @override
   void initState() {
@@ -37,20 +37,22 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: homePageAppBar(),
-      body: [homePageBody(setState, filter), ListeningRoom()][currentPageIndex],
-      bottomNavigationBar: NavigationBar(
-        destinations: [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(
-            icon: Icon(Icons.music_note),
-            label: "Listening Room",
-          ),
-        ],
-        onDestinationSelected: (value) => setState(() {
-          currentPageIndex = value;
-        }),
-        selectedIndex: currentPageIndex,
-      ),
+      body: [
+        homePageBody(setState, filter),
+        ListeningRoom(roomDetails: roomDetials),
+      ][roomDetials.currentPageIndex],
+      bottomNavigationBar: homePageNavigationBar(setState, roomDetials),
     );
   }
+}
+
+class RoomDetails {
+  String? roomName;
+  String? roomID;
+  TextEditingController roomNamecontroller = TextEditingController();
+  TextEditingController roomIDcontroller = TextEditingController();
+  int currentPageIndex = 0;
+  ListeningRoomPage listeningRoomPage = ListeningRoomPage.home;
+
+  RoomDetails({this.roomID, this.roomName});
 }
