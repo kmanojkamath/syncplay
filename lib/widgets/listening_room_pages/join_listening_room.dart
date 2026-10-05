@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncplay/logic/room_details.dart';
 import 'package:syncplay/pages/listening_room.dart';
@@ -5,17 +6,25 @@ import 'package:syncplay/pages/listening_room.dart';
 Widget joinRoomScreen(RoomDetails roomDetails, Function setState) {
   return Column(
     children: [
-      TextField(controller: roomDetails.roomNamecontroller),
       TextField(controller: roomDetails.roomIDcontroller),
       ElevatedButton(
-        onPressed: () {
-          setState(() {
-            roomDetails.roomID = roomDetails.roomIDcontroller.text;
-            roomDetails.roomName = roomDetails.roomNamecontroller.text;
-            roomDetails.listeningRoomPage = ListeningRoomPage.room;
-          });
+        onPressed: () async {
+          final id = roomDetails.roomIDcontroller.text;
+          final doc = await FirebaseFirestore.instance
+              .collection("rooms")
+              .doc(id)
+              .get();
+          final data = doc.data();
+          if (data == null) {
+            //No Such Room
+          } else {
+            setState(() {
+              roomDetails.room = Room.fromFire(id, data);
+              roomDetails.listeningRoomPage = ListeningRoomPage.room;
+            });
+          }
         },
-        child: Text("Submit"),
+        child: Text("Join"),
       ),
     ],
   );

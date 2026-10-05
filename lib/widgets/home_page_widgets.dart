@@ -24,7 +24,7 @@ Widget _filters(Function setState, RoomDetails roomDetails) {
       Padding(padding: const EdgeInsets.all(8.0), child: Icon(Icons.search)),
       Expanded(
         child: TextField(
-          controller: roomDetails.controller,
+          controller: roomDetails.searchController,
           onChanged: (_) {
             setState(() {});
           },

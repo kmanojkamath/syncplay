@@ -16,15 +16,18 @@ Widget createRoomScreen(RoomDetails roomDetails, Function setState) {
         (_) => chars[random.nextInt(chars.length)],
       ).join();
 
-      FirebaseFirestore.instance.collection("rooms").doc(id).set({
-        "name": roomDetails.roomNamecontroller.text,
-        "lastUpdated": FieldValue.serverTimestamp(),
-        "isPlaying": false
-      });
-      
+      await FirebaseFirestore.instance
+          .collection("rooms")
+          .doc(id)
+          .set(
+            Room(name: roomDetails.roomNamecontroller.text, id: id).toFire(),
+          );
+
       setState(() {
-        roomDetails.roomID = id;
-        roomDetails.roomName = roomDetails.roomNamecontroller.text;
+        roomDetails.room = Room(
+          name: roomDetails.roomNamecontroller.text,
+          id: id,
+        );
         roomDetails.listeningRoomPage = ListeningRoomPage.room;
       });
     },

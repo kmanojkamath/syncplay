@@ -1,5 +1,6 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncplay/data/audios.dart';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
@@ -39,6 +40,10 @@ class _MusicCardState extends State<_MusicCard> {
   AudioMetadata get metadata => widget.roomDetails.metadatas[widget.index];
   AudioPlayer get player => widget.roomDetails.audioPlayers[widget.index];
 
+  DocumentReference<Map<String, dynamic>>? get roomRef =>
+      widget.roomDetails.roomRef;
+  Room get room => widget.roomDetails.room!;
+
   @override
   Widget build(BuildContext context) {
     double maxWidth = MediaQuery.sizeOf(context).width;
@@ -60,7 +65,8 @@ class _MusicCardState extends State<_MusicCard> {
                     Row(
                       children: [
                         PausePlayButton(
-                          player: widget.roomDetails.audioPlayers[widget.index],
+                          roomDetails: widget.roomDetails,
+                          index: widget.index,
                         ),
                         SizedBox(
                           width: maxWidth * 0.8 - 104,
@@ -92,8 +98,20 @@ class _MusicCardState extends State<_MusicCard> {
                           child: ProgressBar(
                             progress: spanshot.data ?? Duration.zero,
                             total: metadata.duration ?? Duration.zero,
-                            onSeek: (value) {
-                              player.seek(value);
+                            onSeek: (value) async {
+                              await player.seek(value);
+                              if (player.state == PlayerState.playing &&
+                                  roomRef != null) {
+                                final duration = await player
+                                    .getCurrentPosition();
+                                room.update(
+                                  index: widget.index,
+                                  duration: duration,
+                                  isPlay: false,
+                                  lastUpdate: DateTime.now(),
+                                );
+                                await roomRef!.update(room.toFire());
+                              }
                             },
                           ),
                         ),

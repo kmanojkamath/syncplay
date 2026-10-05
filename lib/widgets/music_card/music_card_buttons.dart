@@ -1,30 +1,70 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncplay/data/audios.dart';
+import 'package:syncplay/logic/room_details.dart';
 
 class PausePlayButton extends StatefulWidget {
-  final AudioPlayer player;
-  const new({super.key, required this.player});
+  final RoomDetails roomDetails;
+  final int index;
+  const new({super.key, required this.roomDetails, required this.index});
 
   @override
   State<PausePlayButton> createState() => _PausePlayButtonState();
 }
 
 class _PausePlayButtonState extends State<PausePlayButton> {
+  DocumentReference<Map<String, dynamic>>? get roomRef =>
+      widget.roomDetails.roomRef;
+
+  Room get room => widget.roomDetails.room!;
+
+  AudioPlayer get player => widget.roomDetails.audioPlayers[widget.index];
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () async {
-        switch (widget.player.state) {
+        switch (player.state) {
           case PlayerState.paused:
-            await widget.player.resume();
+            await player.resume();
+            if (player.state == PlayerState.playing && roomRef != null) {
+              final duration = await player.getCurrentPosition();
+              room.update(
+                index: widget.index,
+                duration: duration,
+                isPlay: true,
+                lastUpdate: DateTime.now(),
+              );
+              await roomRef!.update(room.toFire());
+            }
             break;
           case PlayerState.playing:
-            await widget.player.pause();
+            await player.pause();
+            if (player.state == PlayerState.playing && roomRef != null) {
+              final duration = await player.getCurrentPosition();
+              room.update(
+                index: widget.index,
+                duration: duration,
+                isPlay: false,
+                lastUpdate: DateTime.now(),
+              );
+              await roomRef!.update(room.toFire());
+            }
             break;
           case PlayerState.completed || PlayerState.stopped:
-            await widget.player.seek(Duration.zero);
-            await widget.player.resume();
+            await player.seek(Duration.zero);
+            await player.resume();
+            if (player.state == PlayerState.playing && roomRef != null) {
+              final duration = await player.getCurrentPosition();
+              room.update(
+                index: widget.index,
+                duration: duration,
+                isPlay: true,
+                lastUpdate: DateTime.now(),
+              );
+              await roomRef!.update(room.toFire());
+            }
             break;
           case PlayerState.disposed:
             break;
@@ -32,9 +72,9 @@ class _PausePlayButtonState extends State<PausePlayButton> {
       },
       icon: StreamBuilder(
         initialData: Icon(Icons.play_arrow),
-        stream: widget.player.onPlayerStateChanged,
+        stream: player.onPlayerStateChanged,
         builder: (context, playerState) {
-          return Icon(switch (widget.player.state) {
+          return Icon(switch (player.state) {
             PlayerState.playing => Icons.pause,
             PlayerState.paused || PlayerState.stopped => Icons.play_arrow,
             PlayerState.completed => Icons.replay,
